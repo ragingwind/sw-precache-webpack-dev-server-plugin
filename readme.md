@@ -16,7 +16,7 @@ $ npm install --save sw-precache-webpack-dev-plugin
 
 ## Usage
 
-See [basic webpack config files](./examples/webpack.config.js) at examples.
+See [basic webpack config files](./example/webpack.config.js) at examples.
 
 ### How to test
 
