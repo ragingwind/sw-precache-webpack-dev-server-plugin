@@ -2,6 +2,7 @@
 
 > Webpack Plugin for using sw-precache during development with webpack-dev-server
 
+![screen shot 2017-01-30 at 7 08 40 pm](https://cloud.githubusercontent.com/assets/124117/22424472/119a2b7e-e73a-11e6-8b4f-325bc0f81339.png)
 
 ## Install
 
