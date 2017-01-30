@@ -19,7 +19,7 @@ function precache(assets, opts) {
 		let cached = Object.keys(assets);
 
 		if (globs.length > 0) {
-			cached = cached.filter(a => multimatch(assets[a].existAt, globs).length > 0);
+			cached = cached.filter(a => multimatch(assets[a].existsAt, globs).length > 0);
 		}
 
 		cached = cached.map(a => `['${a}', '${hash(a)}']`);
@@ -35,18 +35,19 @@ class SWPrecacheWebpackDevPlugin {
 	constructor(opts) {
 		this.opts = Object.assign({
 			logger: function () {},
-			filename: 'sw.js'
+			filename: '/sw.js'
 		}, opts);
+
+		if (this.opts.filename.startsWith('/') === false) {
+			this.opts.filename = '/' + this.opts.filename;
+		}
 	}
 
 	apply(compiler) {
-		compiler.plugin('emit', (compilation, done) => {
+		compiler.plugin('after-emit', (compilation, done) => {
+			console.log(compilation.assets);
 			precache(compilation.assets, this.opts).then(sw => {
-				compilation.assets[this.opts.filename] = {
-					source: () => sw,
-					size: () => sw.length
-				};
-
+				compiler.outputFileSystem.writeFileSync(this.opts.filename, sw);
 				done();
 			}, err => {
 				throw new Error(`Precached failed: ${err.toString()}`)

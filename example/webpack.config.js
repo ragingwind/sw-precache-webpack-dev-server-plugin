@@ -15,7 +15,7 @@ module.exports = {
 			// sw-precache options
 			cacheId: 'your-appcache-id',
 			staticFileGlobs: [
-				path.join(path.resolve(__dirname, '../build'), '/*.html')
+				'/*.js'
 			],
 			runtimeCaching: [{
 				handler: 'cacheFirst',

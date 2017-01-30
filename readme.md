@@ -14,6 +14,10 @@ or
 $ npm install --save sw-precache-webpack-dev-plugin
 ```
 
+### How it works
+
+To generate precache manifest in service worker, this plugin must be applied after all of assets has been emmited by webpack compiling. this plugin will write a file in temporory to data space in memory-fs and webpack dev server will be served by filepath.
+
 ## Usage
 
 See [basic webpack config files](./example/webpack.config.js) at examples.
@@ -31,6 +35,8 @@ or
 $ npm start
 ```
 
+and open browser, visit to `localhost:8080`
+
 ## Configuration
 
 It will accept and pass through all of [options parameter of sw-precache](https://github.com/GoogleChrome/sw-precache#options-parameter) to [sw-precache](https://github.com/GoogleChrome/sw-precache). By the way, there are more options and a few of specical way to treats passed configurations.
@@ -41,11 +47,11 @@ It will accept and pass through all of [options parameter of sw-precache](https:
 
 ### Plugin Configurations
 
-- filename: [String] - Service worker script name for serving on dev server. It is same with [sw-precache-webpack-plugin](https://github.com/goldhand/sw-precache-webpack-plugin#configuration)
+- filename: [String] - Service worker script name for serving on dev server. It is same with [sw-precache-webpack-plugin](https://github.com/goldhand/sw-precache-webpack-plugin#configuration), must be started with '/'
 
 ## Test
 
-It will be provided soon
+It will be covered soon
 
 ## License
 
