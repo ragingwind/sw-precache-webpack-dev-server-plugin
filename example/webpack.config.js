@@ -22,7 +22,7 @@ module.exports = {
 				urlPattern: /https?:\/\/fonts.+/
 			}],
 			// plugin options
-			filename: 'sw.js'
+			filename: '/sw.js'
 		})
 	]
 };
