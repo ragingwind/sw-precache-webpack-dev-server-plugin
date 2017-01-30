@@ -48,7 +48,7 @@ It will accept and pass through all of [options parameter of sw-precache](https:
 
 ### Plugin Configurations
 
-- filename: [String] - Service worker script name for serving on dev server. It is same with [sw-precache-webpack-plugin](https://github.com/goldhand/sw-precache-webpack-plugin#configuration), must be started with '/'
+- filename: [String] - Service worker script name for serving on dev server. It is same with [sw-precache-webpack-plugin](https://github.com/goldhand/sw-precache-webpack-plugin#configuration).
 
 ## Test
 

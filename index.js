@@ -1,5 +1,6 @@
 'use strict';
 
+const path = require('path');
 const crypto = require('crypto');
 const swPrecache = require('sw-precache');
 const multimatch = require('multimatch');
@@ -46,8 +47,8 @@ class SWPrecacheWebpackDevPlugin {
 	apply(compiler) {
 		compiler.plugin('after-emit', (compilation, done) => {
 			precache(compilation.assets, this.opts).then(sw => {
-				compiler.outputFileSystem.writeFileSync(this.opts.filename, sw);
-				done();
+				const filepath = path.join(compiler.options.output.path, this.opts.filename);
+				compiler.outputFileSystem.writeFile(filepath, sw, done);
 			}, err => {
 				throw new Error(`Precached failed: ${err.toString()}`)
 			});
