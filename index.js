@@ -45,7 +45,6 @@ class SWPrecacheWebpackDevPlugin {
 
 	apply(compiler) {
 		compiler.plugin('after-emit', (compilation, done) => {
-			console.log(compilation.assets);
 			precache(compilation.assets, this.opts).then(sw => {
 				compiler.outputFileSystem.writeFileSync(this.opts.filename, sw);
 				done();
