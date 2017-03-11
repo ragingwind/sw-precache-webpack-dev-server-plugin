@@ -17,7 +17,9 @@ $ npm install --save sw-precache-webpack-dev-plugin
 
 ### How it works
 
-To generate precache manifest in service worker, this plugin must be applied after all of assets has been emmited by webpack compiling. this plugin will write a file in temporory to data space in memory-fs and webpack dev server will be served by filepath.
+First of all, this plugin works in vary limited situation. This plugin will be applied after `all of assets has been emmited by webpack compiling` that means all of files you wanted to cached by service worker should be listed in assets of webpack compiler. To achive that, you need to use webpack plugins(Copy or ...) to register it. [The latest version supports glob patterns for files located in physical path](https://github.com/ragingwind/sw-precache-webpack-dev-plugin/commit/8babdf7938609f6db5178859b88f6f3365e285c6#diff-168726dbe96b3ce427e7fedce31bb0bcR23) not on memory-fs of webpack. However, I recommend that using webpack plugins to treats and list all of files to server worker's chached manifest. And then your sw.js, will be writed in temporory on memory-fs and webpack dev server will be served it.
+
+*DISCLAIMER*: This plugin isn't able to be work perfectly when it comes to manage kind of files including ambiguous expression of path, For examples, ['*.js', '*.html'], in that case, we couldn't make a right judge for location between physical file path and memory-fs. Therefore, we recommand you use more specific glob patterns for that, like absolute path or relative path expressions.
 
 ## Usage
 

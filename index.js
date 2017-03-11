@@ -4,26 +4,57 @@ const path = require('path');
 const crypto = require('crypto');
 const swPrecache = require('sw-precache');
 const multimatch = require('multimatch');
+const glob = require('glob');
+const isPathInside = require('is-path-inside');
 
 function hash(data) {
 	const md5 = crypto.createHash('md5');
 	return md5.update(data + Date.now()).digest('hex');
 }
 
+function absolutePath(relativePath) {
+	return path.resolve(process.cwd(), relativePath);
+}
+
+// DISCLAIMER: it can't make a right judge as patttern isn't starting
+// without any hierarchical characaters like '/' or './'. For examples,
+// ['*.js', '*.html'], in that case, we couldn't choice the location between
+// file or root path on web server that result in gathering all files of both
+function filterGlobs(context, globs) {
+	const assetGlobs = [];
+	let cachedFiles = [];
+
+	globs.forEach(pattern => {
+		const file = isPathInside(absolutePath(pattern), context);
+
+		if (file) {
+			cachedFiles = cachedFiles.concat(glob.sync(pattern.replace(path.sep, '/')));
+		} else {
+			assetGlobs.push(pattern);
+		}
+	});
+
+	return {assetGlobs, cachedFiles};
+}
+
 function precache(assets, opts) {
-	// reset glob list to prevent precache to use
-	// unavailable compiled files on webpack
-	let globs = opts.staticFileGlobs || [];
+	// will determine the location that each of file glob patterns
+	// working on either file or memfs.
+	let globs = filterGlobs(opts.context, opts.staticFileGlobs);
+
+	// empty glob list to prevent precache to access files on webpack memfs
 	opts.staticFileGlobs = [];
 
 	return swPrecache.generate(opts).then(sw => {
-		let cached = Object.keys(assets);
+		let cached = globs.cachedFiles;
 
-		if (globs.length > 0) {
-			cached = cached.filter(a => multimatch(assets[a].existsAt, globs).length > 0);
+		if (globs.assetGlobs.length > 0) {
+			cached = cached.concat(Object.keys(assets).filter(a => {
+				return multimatch(assets[a].existsAt, globs.assetGlobs).length > 0;
+			}));
 		}
 
-		cached = cached.map(a => `['${a}', '${hash(a)}']`);
+		cached = cached.map(a => `['${a.startsWith('/') ? '' : '/'}${a}', '${hash(a)}']`);
 
 		const timestamp = `// Manipulated by SWPrecacheWebpackDevPlugin ${new Date()}\n`;
 		const re = new RegExp('var precacheConfig = \\[.*\\];', 'gi');
@@ -46,6 +77,9 @@ class SWPrecacheWebpackDevPlugin {
 
 	apply(compiler) {
 		compiler.plugin('after-emit', (compilation, done) => {
+			// @TODO: May it change to process.cwd()
+			this.opts.context = compiler.context;
+
 			precache(compilation.assets, this.opts).then(sw => {
 				const filepath = path.join(compiler.options.output.path, this.opts.filename);
 				compiler.outputFileSystem.writeFile(filepath, sw, done);

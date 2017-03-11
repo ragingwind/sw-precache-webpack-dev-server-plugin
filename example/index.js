@@ -1,3 +1,6 @@
+const components = require('./src/components');
+const stores = require('./src/stores');
+
 function result(msg) {
 	const body = document.querySelector('body');
 	body.textContent = msg;
