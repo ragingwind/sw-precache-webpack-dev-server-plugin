@@ -1,4 +1,4 @@
-# sw-precache-webpack-dev-plugin
+# sw-precache-webpack-dev-server-plugin
 
 > Webpack Plugin for using sw-precache during development with webpack-dev-server
 
@@ -7,19 +7,19 @@
 ## Install
 
 ```sh
-$ yarn add --dev sw-precache-webpack-dev-plugin
+$ yarn add --dev sw-precache-webpack-dev-server-plugin
 ```
 
 or
 ```sh
-$ npm install --save sw-precache-webpack-dev-plugin
+$ npm install --save sw-precache-webpack-dev-server-plugin
 ```
 
 ### How it works
 
-First of all, this plugin works in vary limited situation. This plugin will be applied after `all of assets has been emmited by webpack compiling` that means all of files you wanted to cached by service worker should be listed in assets of webpack compiler. To achive that, you need to use webpack plugins(Copy or ...) to register it. [The latest version supports glob patterns for files located in physical path](https://github.com/ragingwind/sw-precache-webpack-dev-plugin/commit/8babdf7938609f6db5178859b88f6f3365e285c6#diff-168726dbe96b3ce427e7fedce31bb0bcR23) not on memory-fs of webpack. However, I recommend that using webpack plugins to treats and list all of files to server worker's chached manifest. And then your sw.js, will be writed in temporory on memory-fs and webpack dev server will be served it.
+*DISCLAIMER*: This plugin isn't able to be work perfectly because of using workaround codes to support memory-fs in webpack. And when it comes to manage including ambiguous expression of path, For examples, ['*.js', '*.html'], in that case, it couldn't make a right judge for location between physical file path and memory-fs. Therefore, we recommand you use more specific glob patterns for that, like absolute path or relative path expressions.
 
-*DISCLAIMER*: This plugin isn't able to be work perfectly when it comes to manage kind of files including ambiguous expression of path, For examples, ['*.js', '*.html'], in that case, we couldn't make a right judge for location between physical file path and memory-fs. Therefore, we recommand you use more specific glob patterns for that, like absolute path or relative path expressions.
+This plugin will be applied after `all of assets has been emmited by webpack compiling`. It means that all of files you wanted to cached by service worker will be listed in assets after webpack compiler. To achive that, you need to use webpack plugins(Copy or ...) to register it, then sw.js will be wrote in temporory on memory-fs. webpack dev server will serve sw.js file. Recently, [the version supports glob patterns for files located in physical path](https://github.com/ragingwind/sw-precache-webpack-dev-server-plugin/commit/8babdf7938609f6db5178859b88f6f3365e285c6#diff-168726dbe96b3ce427e7fedce31bb0bcR23) not on memory-fs of webpack. Although, uing webpack plugins is a still recommendation that to make server worker will be working well.
 
 ## Usage
 

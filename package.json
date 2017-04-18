@@ -1,9 +1,9 @@
 {
-  "name": "sw-precache-webpack-dev-plugin",
+  "name": "sw-precache-webpack-dev-server-plugin",
   "version": "0.2.0",
   "description": "Webpack Plugin for using sw-precache during development with webpack-dev-server",
   "license": "MIT",
-  "repository": "ragingwind/sw-precache-webpack-dev-plugin",
+  "repository": "ragingwind/sw-precache-webpack-dev-server-plugin",
   "author": {
     "name": "ragingwind",
     "email": "ragingwind@gmail.com",
