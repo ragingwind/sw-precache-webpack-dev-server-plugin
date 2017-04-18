@@ -28,7 +28,14 @@ function filterGlobs(context, globs) {
 		const file = isPathInside(absolutePath(pattern), context);
 
 		if (file) {
-			cachedFiles = cachedFiles.concat(glob.sync(pattern.replace(path.sep, '/')));
+			const files = glob.sync(pattern.replace(path.sep, '/'));
+
+			if (files.length > 0) {
+				cachedFiles = cachedFiles.concat(files);
+			} else {
+				// add pattern anyway if files doesn't exist
+				assetGlobs.push(pattern);
+			}
 		} else {
 			assetGlobs.push(pattern);
 		}
