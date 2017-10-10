@@ -87,6 +87,10 @@ class SWPrecacheWebpackDevPlugin {
 			// @TODO: May it change to process.cwd()
 			this.opts.context = compiler.context;
 
+		const scripts = this.opts.importScripts || [];
+		const importScripts = scripts.map(f => f.replace(/\[hash\]/g, compilation.hash));
+		this.opts.importScripts = importScripts;
+
 			precache(compilation.assets, this.opts).then(sw => {
 				const filepath = path.join(compiler.options.output.path, this.opts.filename);
 				compiler.outputFileSystem.writeFile(filepath, sw, done);
